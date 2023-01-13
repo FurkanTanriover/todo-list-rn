@@ -1,32 +1,28 @@
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import * as Icons from "react-native-heroicons/outline";
+//redux ref
+import { useDispatch, useSelector } from "react-redux";
+import { deleteTodo } from "../redux/todoSlice";
 
 const TodoList = () => {
-  const data = [
-    {
-      id: 1,
-      title: "Todo 1",
-    },
-    {
-      id: 2,
-      title: "Todo 2",
-    },
-    {
-      id: 3,
-      title: "Todo 3",
-    },
-    {
-      id: 4,
-      title: "Todo 4",
-    },
-  ];
+  const todos = useSelector((state) => state.todo);
+  const dispatch = useDispatch();
+  console.log(todos);
+
+  const deleteItem = (id) => {
+    dispatch(
+      deleteTodo({
+        id: id,
+      })
+    );
+  };
 
   const renderItem = ({ item }) => {
     return (
       <View className="border rounded-md bg-slate-200 my-3 p-3 mx-8 flex flex-row justify-between items-center">
-        <Text>{item.title}</Text>
-        <TouchableOpacity>
+        <Text>{item.name}</Text>
+        <TouchableOpacity onPress={() => deleteItem(item.id)}>
           <Icons.TrashIcon color={"red"} />
         </TouchableOpacity>
       </View>
@@ -34,7 +30,7 @@ const TodoList = () => {
   };
   return (
     <View className="pt-3 ">
-      <FlatList data={data} renderItem={renderItem} keyExtractor={(item) => item.id.toString()} />
+      <FlatList data={todos} renderItem={renderItem} keyExtractor={(item) => item.id} />
     </View>
   );
 };
