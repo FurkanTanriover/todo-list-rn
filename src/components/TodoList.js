@@ -1,14 +1,24 @@
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import * as Icons from "react-native-heroicons/outline";
 //redux ref
 import { useDispatch, useSelector } from "react-redux";
 import { deleteTodo } from "../redux/todoSlice";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const TodoList = () => {
   const todos = useSelector((state) => state.todo);
   const dispatch = useDispatch();
   console.log(todos);
+
+  const getSavedTodos = async () => {
+    const result = await AsyncStorage.getItem("todos");
+    console.log("result",result);
+  }
+
+  useEffect(()=>{
+    getSavedTodos()
+  },[todos])
 
   const deleteItem = (id) => {
     dispatch(

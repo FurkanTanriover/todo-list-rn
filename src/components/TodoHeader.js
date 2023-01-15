@@ -3,13 +3,15 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import Toast from "react-native-toast-message";
 import { addTodo } from "../redux/todoSlice";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const TodoHeader = () => {
   // redux ref
   const dispatch = useDispatch();
   // state
   const [todo, setTodo] = useState("");
-
+  const id= Date.now()
+  console.log("1",id);
   const addTodos = () => {
     if (todo.trim().length == 0) {
       Toast.show({
@@ -37,20 +39,25 @@ const TodoHeader = () => {
       });
       dispatch(
         addTodo({
-          id: Math.random(),
+          id: id,
           name: todo,
         })
       );
+      const savedTodo={
+        id:id,
+        name:todo
+      }
+        AsyncStorage.setItem("todos",JSON.stringify(savedTodo));
     }
   };
 
   return (
-    <View className="bg-slate-500 p-3">
+    <View className=" p-3">
       {/* header */}
       <Text className="flex  text-center text-lg font-bold mt-5">TodoList</Text>
       {/* input */}
       <TextInput
-        className="border-2 p-3 placeholder:bg-slate-200 border-gray-300 rounded-lg w-11/12 mx-auto mt-5"
+        className="border-2 p-3 border-gray-300 rounded-lg w-11/12 mx-auto mt-5"
         placeholder="Add Todo"
         onChangeText={setTodo}
         value={todo}
@@ -64,7 +71,7 @@ const TodoHeader = () => {
         }}
       >
         <Text className="text-center text-white">Add Todo</Text>
-      </TouchableOpacity>
+        </TouchableOpacity>
     </View>
   );
 };
