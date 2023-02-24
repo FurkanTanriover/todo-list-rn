@@ -2,4 +2,6 @@
 
 ## Features
 - Redux state management
-- NativeWind UI
+- NativeWind UI design
+- Asycn storage local storage
+- Toast Message
